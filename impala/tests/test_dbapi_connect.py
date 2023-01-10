@@ -126,6 +126,18 @@ class ImpalaConnectionTests(unittest.TestCase):
         self._execute_queries(self.connection)
 
     @pytest.mark.skipif(DEFAULT_AUTH, reason=DEFAULT_AUTH_ERROR)
+    def test_impala_ldap_connect_user_agent(self):
+        self.connection = connect(ENV.host, ENV.port, auth_mechanism="LDAP",
+                                  timeout=5,
+                                  user=ENV.hive_user,
+                                  password="cloudera",
+                                  http_path="http-path",
+                                  use_http_transport=True,
+                                  use_ssl=True,
+                                  user_agent="cloudera/impyla")
+        self._execute_queries(self.connection)
+
+    @pytest.mark.skipif(DEFAULT_AUTH, reason=DEFAULT_AUTH_ERROR)
     def test_hive_nosasl_connect(self):
         self.connection = connect(ENV.host, ENV.hive_port, timeout=5)
         self._execute_queries(self.connection)
